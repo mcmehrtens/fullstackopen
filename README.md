@@ -9,9 +9,9 @@ Below is the file structure that will be strictly followed for code submissions 
 ```text
 exercises/
 ├─ part0/
-│  ├─ 0.4 New note diagram/
+│  ├─ 04 New note diagram/
 │  │  ├─ <source files>
-│  ├─ 0.5 Single page app diagram/
+│  ├─ 05 Single page app diagram/
 │  ├─ .../
 ├─ part1/
 ├─ .../
