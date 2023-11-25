@@ -1,2 +1,22 @@
-# fullstackopen
-Full Stack Open submission repository for Matthew Mehrtens.
+# Full Stack Open
+
+Full Stack Open submission (mono-)repository for Matthew Mehrtens. All exercises for all parts can be found in this repository.
+
+## Organization
+
+Below is the file structure that will be strictly followed for code submissions to this repository.
+
+```text
+exercises/
+├─ part0/
+│  ├─ 0.4 New note diagram/
+│  │  ├─ <source files>
+│  ├─ 0.5 Single page app diagram/
+│  ├─ .../
+├─ part1/
+├─ .../
+```
+
+## Contact
+
+Please reach out to me via my GitHub profile or email (matthew@mehrtens.cc).
