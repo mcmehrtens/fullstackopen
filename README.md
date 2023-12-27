@@ -7,14 +7,13 @@ Full Stack Open submission (mono-)repository for Matthew Mehrtens. All exercises
 Below is the file structure that will be strictly followed for code submissions to this repository.
 
 ```text
-exercises/
-├─ part0/
-│  ├─ 04 New note diagram/
-│  │  ├─ <source files>
-│  ├─ 05 Single page app diagram/
-│  ├─ .../
-├─ part1/
-├─ .../
+part0/
+├─ 04 New note diagram/
+│  ├─ <source files>
+├─ 05 Single page app diagram/
+├─ ...
+part1/
+...
 ```
 
 ## Contact
