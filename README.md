@@ -13,8 +13,13 @@ part0/
 ├─ 05 Single page app diagram/
 ├─ ...
 part1/
+├─ course information/
+│  ├─ <source files>
+├─ ...
 ...
 ```
+
+Subfolders in the part directories may be named "\<Exercise Number\> \<Exercise Name\>" or, if the exercise is multi-part, "\<Exercise Name\>".
 
 ## Contact
 
