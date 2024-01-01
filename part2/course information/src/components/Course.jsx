@@ -6,6 +6,7 @@ const Course = ({course}) => {
     const total = course.parts
         .map(part => part.exercises)
         .reduce((prev, curr) => prev + curr)
+
     return (
         <div>
             <Header course={course.name} />
