@@ -1,7 +1,7 @@
 import {useState} from 'react'
-
-const Input = ({value, handler}) =>
-    <input value={value} onChange={(event) => handler(event.target.value)} />
+import Filter from './components/Filter.jsx'
+import PersonForm from "./components/PersonForm.jsx";
+import Persons from "./components/Persons.jsx";
 
 const App = () => {
     const [persons, setPersons] = useState([
@@ -19,6 +19,7 @@ const App = () => {
         const personObject = {
             name: newName,
             number: newNumber,
+            id: persons.length + 1,
         }
         if (persons.map(person => person.name).includes(newName)) {
             alert(`${newName} is already added to phonebook`)
@@ -26,6 +27,7 @@ const App = () => {
             setPersons(persons.concat(personObject))
             setNewName('')
             setNewNumber('')
+            setFilter('')
         }
     }
 
@@ -37,29 +39,13 @@ const App = () => {
     return (
         <>
             <h2>Phonebook</h2>
-            <div>
-                filter shown with <Input value={filter} handler={setFilter} />
-            </div>
-            <h2>add a new</h2>
-            <form onSubmit={addPerson}>
-                <div>
-                    name: <Input value={newName} handler={setNewName} />
-                </div>
-                <div>
-                    number: <Input value={newNumber} handler={setNewNumber} />
-                </div>
-                <div>
-                    <button type={"submit"}>add</button>
-                </div>
-            </form>
-            <h2>Numbers</h2>
-            <div>
-                {filteredPersons.map(person => (
-                    <p key={person.name}>
-                        {person.name} {person.number}
-                    </p>
-                ))}
-            </div>
+            <Filter filter={filter} setFilter={setFilter} />
+            <h3>add a new</h3>
+            <PersonForm addPerson={addPerson} newName={newName}
+                        setNewName={setNewName} newNumber={newNumber}
+                        setNewNumber={setNewNumber} />
+            <h3>Numbers</h3>
+            <Persons persons={filteredPersons} />
         </>
     )
 }
