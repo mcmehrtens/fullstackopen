@@ -119,6 +119,16 @@ const App = () => {
                 notifyUser(
                     `Updated phone number for '${returnedPerson.name}'`,
                     notificationType.confirm)
+                setNewName('')
+                setNewNumber('')
+                setFilter('')
+            })
+            .catch(() => {
+                notifyUser(
+                    `'${updatedPerson.name}' was deleted from the server`,
+                    notificationType.error
+                )
+                setPersons(persons.filter(person => person.id !== id))
             })
     }
 
@@ -148,8 +158,16 @@ const App = () => {
     }
 
     const deletePerson = id => () => {
-        personService.remove(id).then(() =>
-            setPersons(persons.filter(person => person.id !== id)))
+        personService
+            .remove(id)
+            .catch(() => {
+                const matchingPerson = persons.find(person => person.id === id)
+                notifyUser(
+                    `'${matchingPerson.name}' was already deleted from the server`,
+                    notificationType.error
+                )
+            })
+        setPersons(persons.filter(person => person.id !== id))
     }
 
     const filteredPersons = filter === ''
