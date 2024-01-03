@@ -1,34 +1,85 @@
-import {useState} from 'react'
-import Filter from './components/Filter.jsx'
-import PersonForm from "./components/PersonForm.jsx";
-import Persons from "./components/Persons.jsx";
+import {useEffect, useState} from 'react'
+import personService from './services/persons'
+
+const Input = ({value, handler}) =>
+    <input value={value} onChange={(event) => handler(event.target.value)} />
+
+const Filter = ({filter, setFilter}) => (
+    <div>
+        filter shown with <Input value={filter} handler={setFilter} />
+    </div>
+)
+
+const PersonForm = ({addPersonHandler, newName, setNewName, newNumber, setNewNumber}) => (
+    <form onSubmit={addPersonHandler}>
+        <div>
+            name: <Input value={newName} handler={setNewName} />
+        </div>
+        <div>
+            number: <Input value={newNumber} handler={setNewNumber} />
+        </div>
+        <div>
+            <button type={"submit"}>add</button>
+        </div>
+    </form>
+)
+
+const Persons = ({persons, deleteHandler}) => (
+    <div>
+        {persons.map(person => (
+            <div key={person.id}>
+                {person.name} {person.number}&nbsp;
+                <button onClick={
+                    deleteHandler(person.id)}>delete
+                </button>
+            </div>
+        ))}
+    </div>
+)
 
 const App = () => {
-    const [persons, setPersons] = useState([
-        {name: 'Arto Hellas', number: '040-123456', id: 1},
-        {name: 'Ada Lovelace', number: '39-44-5323523', id: 2},
-        {name: 'Dan Abramov', number: '12-43-234345', id: 3},
-        {name: 'Mary Poppendieck', number: '39-23-6423122', id: 4}
-    ])
+    const [persons, setPersons] = useState([])
     const [filter, setFilter] = useState('')
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
 
-    const addPerson = (event) => {
+    useEffect(() => {
+        personService.getAll().then(initialPersons =>
+            setPersons(initialPersons))
+    }, [])
+
+    const updatePerson = (id, updatedPerson) => {
+        personService
+            .update(id, updatedPerson)
+            .then(returnedPerson => setPersons(persons.map(person =>
+                person.id !== returnedPerson.id ? person : returnedPerson
+            )))
+    }
+
+    const addPerson = event => {
         event.preventDefault()
         const personObject = {
             name: newName,
             number: newNumber,
-            id: persons.length + 1,
         }
         if (persons.map(person => person.name).includes(newName)) {
-            alert(`${newName} is already added to phonebook`)
+            const id = persons.find(person => person.name === newName).id
+            if (confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+                updatePerson(id, personObject)
+            } else return
         } else {
-            setPersons(persons.concat(personObject))
-            setNewName('')
-            setNewNumber('')
-            setFilter('')
+            personService.add(personObject).then(returnedPerson =>
+                setPersons(persons.concat(returnedPerson))
+            )
         }
+        setNewName('')
+        setNewNumber('')
+        setFilter('')
+    }
+
+    const deletePerson = id => () => {
+        personService.remove(id).then(() =>
+            setPersons(persons.filter(person => person.id !== id)))
     }
 
     const filteredPersons = filter === ''
@@ -41,11 +92,11 @@ const App = () => {
             <h2>Phonebook</h2>
             <Filter filter={filter} setFilter={setFilter} />
             <h3>add a new</h3>
-            <PersonForm addPerson={addPerson} newName={newName}
+            <PersonForm addPersonHandler={addPerson} newName={newName}
                         setNewName={setNewName} newNumber={newNumber}
                         setNewNumber={setNewNumber} />
             <h3>Numbers</h3>
-            <Persons persons={filteredPersons} />
+            <Persons persons={filteredPersons} deleteHandler={deletePerson} />
         </>
     )
 }
